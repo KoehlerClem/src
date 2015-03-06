@@ -1,6 +1,7 @@
 
 #include "../h/main.h"
 
+
 /// DO NOT DELETE THIS METHOD
 /// It is called every 1ms and e.g. can be used for implementing a
 /// real time counter / clock.
@@ -42,16 +43,12 @@ void left2(int g) {
 void right2(int g) {
         nxt_motor_set_count(NXT_PORT_A,0);
 
-
-
         do{
             nxt_motor_set_speed(NXT_PORT_A,65,0);
             nxt_motor_set_speed(NXT_PORT_C,-65,0);
 
 
         }while(( ecrobot_get_light_sensor(NXT_PORT_S2) <= a) && (nxt_motor_get_count(NXT_PORT_A) <= g));
-
-
 }
 
 void left3(int g){
@@ -62,9 +59,6 @@ void left3(int g){
 	            nxt_motor_set_speed(NXT_PORT_C,65,0);
 	          }
 	        while(nxt_motor_get_count(NXT_PORT_C) <= g);
-
-
-
 }
 
 
@@ -85,12 +79,9 @@ void token(){
     systick_wait_ms(10000);
 }
 
-
-
 void cross(){
 
-
-    int lineV;
+	int lineV;
     int lineL;
     int lineR;
 
@@ -147,6 +138,7 @@ void cross(){
                       }
 
 
+<<<<<<< HEAD
                 int richtung;
                            //Hilfsfunktion
                         if( lineL == 0){
@@ -203,6 +195,15 @@ void cross(){
                          	  	  	  ecrobot_sound_tone(1000, 400, 50);
                          }
 
+=======
+               if(lineR == 0){
+                	do{
+                		nxt_motor_set_speed(NXT_PORT_A,-65,0);
+                		nxt_motor_set_speed(NXT_PORT_C,65,0);
+                		}
+                	 while(ecrobot_get_light_sensor(NXT_PORT_S2) <= a );
+               	  }
+>>>>>>> origin/master
 }
 
 void sensor(){
@@ -213,8 +214,6 @@ void sensor(){
     }
 
     move(70);
-
-
 
     if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){
         //do{
@@ -228,11 +227,7 @@ void sensor(){
 
 }
 
-
-
-
-
-    TASK(OSEK_Main_Task) {
+   TASK(OSEK_Main_Task) {
         while (1) {
             hello_world();
             sensor();
