@@ -91,15 +91,6 @@ void right3(int g){
 
 
 
-void left3(int g){
-	 nxt_motor_set_count(NXT_PORT_A,0);
-
-	        do{
-	            nxt_motor_set_speed(NXT_PORT_C,-65,0);
-	            nxt_motor_set_speed(NXT_PORT_A,65,0);
-	          }
-	        while(nxt_motor_get_count(NXT_PORT_A) <= g);
-}
 
 void stopp(){
     nxt_motor_set_speed(NXT_PORT_C,0,0);
