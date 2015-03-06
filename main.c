@@ -228,7 +228,9 @@ void cross(){
                          	  	  	  ecrobot_sound_tone(1000, 400, 50);
                          	  	  	  ecrobot_sound_tone(100, 400, 50);
                          	  	  	  ecrobot_sound_tone(1000, 400, 50);
-                         }
+
+
+                }
 
 
 }
