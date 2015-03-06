@@ -80,6 +80,15 @@ void left3(int g){
 	        while(nxt_motor_get_count(NXT_PORT_C) <= g);
 }
 
+void left3(int g){
+	 nxt_motor_set_count(NXT_PORT_A,0);
+
+	        do{
+	            nxt_motor_set_speed(NXT_PORT_C,-65,0);
+	            nxt_motor_set_speed(NXT_PORT_A,65,0);
+	          }
+	        while(nxt_motor_get_count(NXT_PORT_A) <= g);
+}
 
 void stopp(){
     nxt_motor_set_speed(NXT_PORT_C,0,0);
@@ -196,12 +205,13 @@ void cross(){
                            	case 2:	//geradeaus
                            		left3(30);
                            		left();
-                           		move(70);
+
                          	  	  break;
 
                          	  case 3://zurück
-                         		  	 left2(900);
-               						 break;
+                         		 right3(30);
+                         		 right();
+                         		 break;
 
                          	  default:
                          	  	  	  ecrobot_sound_tone(1000, 400, 50);
