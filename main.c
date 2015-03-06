@@ -209,6 +209,7 @@ void cross(){								// kreuzung, fährt nach links( g = 100) sodass er gerade s
 
                          	  	  break;
 
+<<<<<<< HEAD
                          	  case 3:				//zurück fahren
                          		  	 right3(30);
                          		  	 right();
