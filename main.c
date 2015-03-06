@@ -24,7 +24,26 @@ void move(int v){
 
     nxt_motor_set_speed(NXT_PORT_C,v,0);
     nxt_motor_set_speed(NXT_PORT_A,v,0);
+
 }
+
+void left() {
+	do{
+	nxt_motor_set_speed(NXT_PORT_A, -65,0);
+	nxt_motor_set_speed(NXT_PORT_C, 65,0);
+	}
+	while(ecrobot_get_light_sensor(NXT_PORT_S2) <= a);
+}
+
+void right() {
+	do{
+	nxt_motor_set_speed(NXT_PORT_A, 65,0);
+	nxt_motor_set_speed(NXT_PORT_C, -65,0);
+	}
+	while(ecrobot_get_light_sensor(NXT_PORT_S2) <= a);
+}
+
+
 
 void left2(int g) {
         nxt_motor_set_count(NXT_PORT_C,0);
@@ -174,14 +193,10 @@ void cross(){
                            		}
                                	break;
 
-                           	case 2://geradeaus
-                         	  	 if(lineR == 0){
-                         	  		 left2(300);
-                         	  	 }else{
-                         	  	  	 left3(50);
-                         	  	  	 ecrobot_sound_tone(1000, 500, 30);
-                         	  	  	 left2(250);
-                  	  	  	  	  }
+                           	case 2:	//geradeaus
+                           		left3(30);
+                           		left();
+                           		move(70);
                          	  	  break;
 
                          	  case 3://zurück
