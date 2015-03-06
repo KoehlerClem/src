@@ -138,7 +138,6 @@ void cross(){
                       }
 
 
-<<<<<<< HEAD
                 int richtung;
                            //Hilfsfunktion
                         if( lineL == 0){
@@ -195,15 +194,7 @@ void cross(){
                          	  	  	  ecrobot_sound_tone(1000, 400, 50);
                          }
 
-=======
-               if(lineR == 0){
-                	do{
-                		nxt_motor_set_speed(NXT_PORT_A,-65,0);
-                		nxt_motor_set_speed(NXT_PORT_C,65,0);
-                		}
-                	 while(ecrobot_get_light_sensor(NXT_PORT_S2) <= a );
-               	  }
->>>>>>> origin/master
+
 }
 
 void sensor(){
