@@ -147,14 +147,62 @@ void cross(){
                       }
 
 
-               if(lineR == 0){
-                	do{
-                		nxt_motor_set_speed(NXT_PORT_A,-65,0);
-                		nxt_motor_set_speed(NXT_PORT_C,65,0);
-                		}
-                	 while(ecrobot_get_light_sensor(NXT_PORT_S2) <= a );
+                int richtung;
+                           //Hilfsfunktion
+                        if( lineL == 0){
+                       	 if(lineR == 0){
+                       		if(lineV == 0){//keine Linie
+                       			richtung = 3;
+                       		}else{// nur geradeaus
+                       			richtung = 2;
+                       		}
+                       	 }else{//geradeaus und links-> links
+                       		 richtung = 0;
+                       	 }
+                        }else{//alle->rechts
+                       	richtung = 1;
+                        }
 
-                }
+
+                           //switch
+
+                switch(richtung){
+                           case 0: //rechts
+                           		break;
+                           	case 1: //links
+                           		if(lineV==0){
+                           			left3(50);
+                           			ecrobot_sound_tone(1000, 500, 30);
+                           			left2(500);
+                           		}else{
+                           			left3(50);
+                           			left2(300);
+                           			ecrobot_sound_tone(100, 500, 30);
+                           			left3(50);
+                           			left2(350);
+                           		}
+                               	break;
+
+                           	case 2://geradeaus
+                         	  	 if(lineR == 0){
+                         	  		 left2(300);
+                         	  	 }else{
+                         	  	  	 left3(50);
+                         	  	  	 ecrobot_sound_tone(1000, 500, 30);
+                         	  	  	 left2(250);
+                  	  	  	  	  }
+                         	  	  break;
+
+                         	  case 3://zurück
+                         		  	 left2(900);
+               						 break;
+
+                         	  default:
+                         	  	  	  ecrobot_sound_tone(1000, 400, 50);
+                         	  	  	  ecrobot_sound_tone(100, 400, 50);
+                         	  	  	  ecrobot_sound_tone(1000, 400, 50);
+                         }
+
 }
 
 void sensor(){
