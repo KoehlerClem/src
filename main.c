@@ -19,7 +19,7 @@ void hello_world() {
 
 }
 
-int a = 750;
+int a = 700;
 void move(int v){
 
     nxt_motor_set_speed(NXT_PORT_C,v,0);
@@ -79,6 +79,7 @@ void left3(int g){
 	          }
 	        while(nxt_motor_get_count(NXT_PORT_C) <= g);
 }
+
 void right3(int g){
 	 nxt_motor_set_count(NXT_PORT_A,0);
 
@@ -170,18 +171,18 @@ void cross(){
 
                 int richtung;
                            //Hilfsfunktion
-                        if( lineL == 0){
+                      if( lineV == 0){
                        	 if(lineR == 0){
-                       		if(lineV == 0){//keine Linie
+                       		if(lineL == 0){//keine Linie
                        			richtung = 3;
-                       		}else{// nur geradeaus
-                       			richtung = 2;
+                       		}else{// nur links
+                       			richtung = 1;
                        		}
-                       	 }else{//geradeaus und links-> links
+                       	 }else{//rechts und links-> rechts
                        		 richtung = 0;
                        	 }
-                        }else{//alle->rechts
-                       	richtung = 1;
+                      }else{//alle->geradeaus
+                    	  richtung = 2;
                         }
 
 
@@ -251,6 +252,7 @@ void sensor(){
         while (1) {
             hello_world();
             sensor();
+            //left3(900);
 
         }
     }
