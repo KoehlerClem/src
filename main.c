@@ -16,6 +16,7 @@ void ecrobot_device_terminate(void) {
 
 void hello_world() {
     ecrobot_status_monitor("");
+    ecrobot_status_monitor("I AM ULTRON");
 
 }
 
@@ -28,6 +29,7 @@ void move(int v){
 }
 
 void left() {
+void left() {			// drehe dich nach links ( mit v = 65) bis ein schwarzer strich kommt
 	do{
 	nxt_motor_set_speed(NXT_PORT_A, -65,0);
 	nxt_motor_set_speed(NXT_PORT_C, 65,0);
@@ -36,6 +38,7 @@ void left() {
 }
 
 void right() {
+void right() {		// drehe dich nach rechts (  mit v = 65) bis ein schwarzer strich kommt
 	do{
 	nxt_motor_set_speed(NXT_PORT_A, 65,0);
 	nxt_motor_set_speed(NXT_PORT_C, -65,0);
@@ -46,6 +49,8 @@ void right() {
 
 
 void left2(int g) {
+void left2(int g) {				// drehe dich nach links( v = 65) bis schwarzer strich kommt
+								//und die umdrehungszahl erreicht ist
         nxt_motor_set_count(NXT_PORT_C,0);
 
         do{
@@ -53,13 +58,14 @@ void left2(int g) {
             nxt_motor_set_speed(NXT_PORT_C,65,0);
 
 
-            ecrobot_status_monitor("wert");
         }while((ecrobot_get_light_sensor(NXT_PORT_S2) <= a) && ( nxt_motor_get_count(NXT_PORT_C) <= g));
 
 
 }
 
 void right2(int g) {
+void right2(int g) {				// drehe dich nach recht ( v = 65) bis schwarzer strich kommt
+									//und umdrehungszahl erreicht ist
         nxt_motor_set_count(NXT_PORT_A,0);
 
         do{
@@ -71,6 +77,7 @@ void right2(int g) {
 }
 
 void left3(int g){
+void left3(int g){					// drehe dich nach links ( v= 65) bis umdrehungszahl(g) erreicht ist( schwarz/weiss egal)
 	 nxt_motor_set_count(NXT_PORT_C,0);
 
 	        do{
@@ -80,7 +87,11 @@ void left3(int g){
 	        while(nxt_motor_get_count(NXT_PORT_C) <= g);
 }
 
+<<<<<<< HEAD
 void right3(int g){
+=======
+void right3(int g){					// drehe dich nach recht ( v = 65) bis umdrehungszahl(g) erreicht ist ( schwarz/weiss egal)
+>>>>>>> origin/master
 	 nxt_motor_set_count(NXT_PORT_A,0);
 
 	        do{
@@ -93,12 +104,10 @@ void right3(int g){
 
 
 
-void stopp(){
-    nxt_motor_set_speed(NXT_PORT_C,0,0);
-    nxt_motor_set_speed(NXT_PORT_A,0,0);
-}
 
 void token(){
+
+void token(){ 					// erkennt gegenstand, gibt ton von sich, fährt ein stück zurück( g= -100), wartet 10 sek
 
     ecrobot_sound_tone(500, 500, 50);
     ecrobot_get_RCX_touch_sensor(NXT_PORT_S1);
@@ -106,11 +115,10 @@ void token(){
     do{
         move(-65);
     }while( nxt_motor_get_count(NXT_PORT_A) >= -100);
-    stopp();
-    systick_wait_ms(10000);
 }
 
 void cross(){
+void cross(){								// kreuzung, fährt nach links( g = 100) sodass er gerade steht
 
 	int lineV;
     int lineL;
@@ -124,12 +132,15 @@ void cross(){
         move(70);
            }
     while(nxt_motor_get_count(NXT_PORT_A) <= 160);  		//bewegt sich nach vorn
+    while(nxt_motor_get_count(NXT_PORT_A) <= 160);  		//bewegt sich nach vorn ( g = 160) über die kreuzung
 
             if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){	//keine Linie
+            if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){	//testet ob grade voraus eine linie ist
                         left2(100);
                         right2(200);
             }
             if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){	//Linie nicht gefunden
+            if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){	//keine Linie
                 lineV = 0;
                 ecrobot_sound_tone(1000, 500, 30);
 
@@ -137,11 +148,14 @@ void cross(){
             else{
                 lineV = 1;
                 ecrobot_sound_tone(100, 500, 30);         	//Linie gefunden
+                ecrobot_sound_tone(100, 500, 30);         	//Linie
 
             }
       //links
             left3(100);
             if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){//keine Linie
+            left3(100);										// dreht sich nach links( g = 100)
+            if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){  //keine linie --> g = 300 nach links
                             left2(300);
 
                 }
@@ -152,20 +166,23 @@ void cross(){
                 else{
                     lineL = 1;
                     ecrobot_sound_tone(100, 500, 30);		//sonst null
+                    ecrobot_sound_tone(100, 500, 30);		//Linie
                    	 }
         //rechts
                 left3(100);
+                left3(100);								// untersucht ob es eine linie rechts gibt
                 left2(300);
                 left3(100);
                 left2(300);
                 if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){
                       lineR = 0;
+                      lineR = 0;						// keine Linie
                       ecrobot_sound_tone(1000, 500, 30);
 
                 }else{
                       lineR = 1;
+                      lineR = 1;						// Linie
                       ecrobot_sound_tone(100, 500, 30);
-                      stopp();
                       }
 
 
@@ -173,6 +190,7 @@ void cross(){
                            //Hilfsfunktion
                       if( lineV == 0){
                        	 if(lineR == 0){
+<<<<<<< HEAD
                        		if(lineL == 0){//keine Linie
                        			richtung = 3;
                        		}else{// nur links
@@ -183,6 +201,18 @@ void cross(){
                        	 }
                       }else{//alle->geradeaus
                     	  richtung = 2;
+=======
+                       		if(lineV == 0){			//keine Linie
+                       			richtung = 3;
+                       		}else{					// nur geradeaus
+                       			richtung = 2;
+                       		}
+                       	 }else{						//geradeaus und links-> links
+                       		 richtung = 0;
+                       	 }
+                        }else{						//alle->rechts
+                       	richtung = 1;
+>>>>>>> origin/master
                         }
 
 
@@ -190,8 +220,10 @@ void cross(){
 
                 switch(richtung){
                            case 0: //rechts
+                           case 0: 					//rechts abbiegen
                            		break;
                            	case 1: //links
+                           	case 1: 				//links abbiegen
                            		if(lineV==0){
                            			left3(50);
                            			ecrobot_sound_tone(1000, 500, 30);
@@ -206,6 +238,7 @@ void cross(){
                                	break;
 
                            	case 2:	//geradeaus
+                           	case 2:					//geradeaus fahren
                            		left3(30);
                            		left();
 
@@ -215,6 +248,10 @@ void cross(){
                          		 right3(30);
                          		 right();
                          		 break;
+                         	  case 3:				//zurück fahren
+                         		  	 right3(30);
+                         		  	 right();
+               						 break;
 
                          	  default:
                          	  	  	  ecrobot_sound_tone(1000, 400, 50);
@@ -229,19 +266,27 @@ void cross(){
 
 void sensor(){
     ecrobot_set_light_sensor_active(NXT_PORT_S2);
+    ecrobot_set_light_sensor_active(NXT_PORT_S2);  // sensor aktiviert
 
     if(ecrobot_get_touch_sensor(NXT_PORT_S3) == 1 || ecrobot_get_touch_sensor(NXT_PORT_S4) == 1){
         token();
+    if(ecrobot_get_touch_sensor(NXT_PORT_S3) == 1 || ecrobot_get_touch_sensor(NXT_PORT_S4) == 1){ // touchsensor wird gedrückt
+        token(); // gehe in void funktion
     }
 
     move(70);
+    move(70); // bewege dich mit v = 70 vor
 
     if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){
+    if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){ // wenn lichtsensor weißen bereich entddeckt, soll er erst
+    												//erkunden ob er nicht von der Linie abgekommen ist, durch
+    												//links/rechts Bewegung
         //do{
             left2(100);
             right2(200);
         //} while(ecrobot_get_light_sensor(NXT_PORT_S2) <= 650);
             if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){
+            if(ecrobot_get_light_sensor(NXT_PORT_S2) <= a){ //wenn immernoch weiß und keine schwarze linie entdeckt--> kreuzung
                 cross();
             }
     }
@@ -249,6 +294,7 @@ void sensor(){
 }
 
    TASK(OSEK_Main_Task) {
+   TASK(OSEK_Main_Task) { // main funktion
         while (1) {
             hello_world();
             sensor();
