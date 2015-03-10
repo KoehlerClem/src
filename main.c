@@ -17,74 +17,68 @@ void hello_world() {
 
 }
 short tokenfound =0;
-int a = 700;
+int a = 600;
 short now = 0;
 short kanten[4]={0,0,0,0};
 void move(int v) {
-
-	nxt_motor_set_speed(NXT_PORT_C, v, 0);
+	nxt_motor_set_speed(NXT_PORT_B, v, 0);
 	nxt_motor_set_speed(NXT_PORT_A, v, 0);
-
 }
 
 void left() {
-	do {
+	while (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {
 		nxt_motor_set_speed(NXT_PORT_A, -65, 0);
-		nxt_motor_set_speed(NXT_PORT_C, 65, 0);
-	} while (ecrobot_get_light_sensor(NXT_PORT_S2) <= a);
+		nxt_motor_set_speed(NXT_PORT_B, 65, 0);
+	}
 }
 
 void right() {
-	do {
+	  while (ecrobot_get_light_sensor(NXT_PORT_S2) <= a){
 		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
-		nxt_motor_set_speed(NXT_PORT_C, -65, 0);
-	} while (ecrobot_get_light_sensor(NXT_PORT_S2) <= a);
+		nxt_motor_set_speed(NXT_PORT_B, -65, 0);
+	}
 }
 
 void left2(int g) {
-	nxt_motor_set_count(NXT_PORT_C, 0);
-
-	do {
+	nxt_motor_set_count(NXT_PORT_B, 0);
+	while ((ecrobot_get_light_sensor(NXT_PORT_S2) <= a)
+			&& (nxt_motor_get_count(NXT_PORT_B) <= g)){
 		nxt_motor_set_speed(NXT_PORT_A, -65, 0);
-		nxt_motor_set_speed(NXT_PORT_C, 65, 0);
-
+		nxt_motor_set_speed(NXT_PORT_B, 65, 0);
 		ecrobot_status_monitor("wert");
-	} while ((ecrobot_get_light_sensor(NXT_PORT_S2) <= a)
-			&& (nxt_motor_get_count(NXT_PORT_C) <= g));
+	}
 
 }
 
 void right2(int g) {
 	nxt_motor_set_count(NXT_PORT_A, 0);
 
-	do {
+	 while ((ecrobot_get_light_sensor(NXT_PORT_S2) <= a)
+			&& (nxt_motor_get_count(NXT_PORT_A) <= g)){
 		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
-		nxt_motor_set_speed(NXT_PORT_C, -65, 0);
-
-	} while ((ecrobot_get_light_sensor(NXT_PORT_S2) <= a)
-			&& (nxt_motor_get_count(NXT_PORT_A) <= g));
+		nxt_motor_set_speed(NXT_PORT_B, -65, 0);
+	}
 }
 
 void left3(int g) {
-	nxt_motor_set_count(NXT_PORT_C, 0);
-
-	do {
+	nxt_motor_set_count(NXT_PORT_B, 0);
+	while (nxt_motor_get_count(NXT_PORT_B) <= g){
 		nxt_motor_set_speed(NXT_PORT_A, -65, 0);
-		nxt_motor_set_speed(NXT_PORT_C, 65, 0);
-	} while (nxt_motor_get_count(NXT_PORT_C) <= g);
+		nxt_motor_set_speed(NXT_PORT_B, 65, 0);
+	}
 }
 
 void right3(int g) {
 	nxt_motor_set_count(NXT_PORT_A, 0);
 
-	do {
+	 while (nxt_motor_get_count(NXT_PORT_A) <= g){
 		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
-		nxt_motor_set_speed(NXT_PORT_C, -65, 0);
-	} while (nxt_motor_get_count(NXT_PORT_A) <= g);
+		nxt_motor_set_speed(NXT_PORT_B, -65, 0);
+	}
 }
 
 void stopp() {
-	nxt_motor_set_speed(NXT_PORT_C, 0, 0);
+	nxt_motor_set_speed(NXT_PORT_B, 0, 0);
 	nxt_motor_set_speed(NXT_PORT_A, 0, 0);
 }
 
@@ -92,9 +86,9 @@ void token() {
 	tokenfound++;
 	ecrobot_sound_tone(500, 500, 50);
 	nxt_motor_set_count(NXT_PORT_A, 0);
-	do {
+	while (nxt_motor_get_count(NXT_PORT_A) >= -100) {
 		move(-65);
-	} while (nxt_motor_get_count(NXT_PORT_A) >= -100);
+	}
 	stopp();
 	systick_wait_ms(10000);
 }
@@ -104,10 +98,9 @@ void scan() {
 	kanten[(now+2)%4]=1;// grade auf der Linie
 	nxt_motor_set_count(NXT_PORT_A, 0);
 
-	do {
+	 while (nxt_motor_get_count(NXT_PORT_A) <= 160){    //bewegt sich nach vorn
 		move(70);
-	} while (nxt_motor_get_count(NXT_PORT_A) <= 160);    //bewegt sich nach vorn
-
+	}
 	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {    //keine Linie
 		left2(100);
 		right2(200);
@@ -119,13 +112,11 @@ void scan() {
 	} else {
 		kanten[now] = 1;
 		ecrobot_sound_tone(100, 500, 30);             //Linie gefunden
-
 	}
 	//links
 	left3(100);
 	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {             //keine Linie
 		left2(250);
-
 	}
 	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {     //Linie nicht gefunden
 		kanten[(now+3)%4] = 0;
@@ -148,25 +139,25 @@ void scan() {
 		ecrobot_sound_tone(100, 500, 30);
 		stopp();
 	}
-	/* /ausrichten
-	if(kanten[(now+1)%4] ==1){
-		left3(50);
-		left2(250);
-	}else{
-		left2(150);
-	}*/
 }
 
 void ausrichten(){
 	nxt_motor_set_count(NXT_PORT_A, 0);
-	do {
+	while (nxt_motor_get_count(NXT_PORT_A) <= 160){
 		move(70);
-		} while (nxt_motor_get_count(NXT_PORT_A) <= 160);    //bewegt sich nach vorn
+		}    //bewegt sich nach vorn
 
 	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {    //keine Linie
 			left2(100);
 			right2(200);
 		}
+	if(kanten[(now+1)%4]==1){
+		right3(50);
+		right2(250);
+	}else{
+		right3(150);
+	}
+
 
 }
 
