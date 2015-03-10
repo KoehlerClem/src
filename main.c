@@ -41,7 +41,7 @@ void hello_world() {
 
 }
 short tokenfound = 0;
-int a= 570;
+int a;
 short now = 0;
 short kanten[4] = { 0, 0, 0, 0 };
 void move(int v) {
@@ -556,6 +556,7 @@ short goHome() {
 }
 TASK(OSEK_Main_Task) {
 	ecrobot_set_light_sensor_active(NXT_PORT_S2);
+	a = ((ecrobot_get_light_sensor(NXT_PORT_S2)) - 100);
 	//a=ecrobot_get_light_sensor(NXT_PORT_S2)-80;
 	sensor();
 	//Füllt alle Points mit werten auf
