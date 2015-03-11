@@ -300,7 +300,6 @@ void createPoint(short coord[2]) {
  * der Wert des current Arrays, also des derzeit vereachteten Punkts zurückgegeben.
  */
 short getArrayAddressFromCoord(short coordToCheck[2]) {
-	ecrobot_status_monitor("Function: getArrayAddressFromCoord");
 	short i;
 	for (i = 0; i < currentArrayPoint; i++) {
 		if (coordToCheck[0] == allPoints[i].coord[0]) {
