@@ -50,6 +50,7 @@ void move(int v) {
 }
 
 void left() {
+	ecrobot_status_monitor("Function: left");
 	while (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {
 		nxt_motor_set_speed(NXT_PORT_A, -65, 0);
 		nxt_motor_set_speed(NXT_PORT_B, 65, 0);
@@ -57,6 +58,7 @@ void left() {
 }
 
 void right() {
+	ecrobot_status_monitor("Function: right");
 	while (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {
 		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
 		nxt_motor_set_speed(NXT_PORT_B, -65, 0);
@@ -64,6 +66,7 @@ void right() {
 }
 
 void left2(int g) {
+	ecrobot_status_monitor("Function: left2");
 	nxt_motor_set_count(NXT_PORT_B, 0);
 	while ((ecrobot_get_light_sensor(NXT_PORT_S2) <= a)
 			&& (nxt_motor_get_count(NXT_PORT_B) <= g)) {
@@ -75,8 +78,8 @@ void left2(int g) {
 }
 
 void right2(int g) {
+	ecrobot_status_monitor("Function: right2");
 	nxt_motor_set_count(NXT_PORT_A, 0);
-
 	while ((ecrobot_get_light_sensor(NXT_PORT_S2) <= a)
 			&& (nxt_motor_get_count(NXT_PORT_A) <= g)) {
 		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
@@ -85,6 +88,7 @@ void right2(int g) {
 }
 
 void left3(int g) {
+	ecrobot_status_monitor("Function: left3");
 	nxt_motor_set_count(NXT_PORT_B, 0);
 	while (nxt_motor_get_count(NXT_PORT_B) <= g) {
 		nxt_motor_set_speed(NXT_PORT_A, -65, 0);
@@ -93,8 +97,8 @@ void left3(int g) {
 }
 
 void right3(int g) {
+	ecrobot_status_monitor("Function: right3");
 	nxt_motor_set_count(NXT_PORT_A, 0);
-
 	while (nxt_motor_get_count(NXT_PORT_A) <= g) {
 		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
 		nxt_motor_set_speed(NXT_PORT_B, -65, 0);
@@ -102,11 +106,13 @@ void right3(int g) {
 }
 
 void stopp() {
+	ecrobot_status_monitor("Function: stop");
 	nxt_motor_set_speed(NXT_PORT_B, 0, 0);
 	nxt_motor_set_speed(NXT_PORT_A, 0, 0);
 }
 
 void token() {
+	ecrobot_status_monitor("Function: token");
 	tokenfound++;
 	ecrobot_sound_tone(500, 500, 50);
 	nxt_motor_set_count(NXT_PORT_A, 0);
@@ -118,6 +124,7 @@ void token() {
 }
 
 void scan() {
+	ecrobot_status_monitor("Function: scan");
 
 	kanten[(now + 2) % 4] = 1; // grade auf der Linie
 	nxt_motor_set_count(NXT_PORT_A, 0);
@@ -165,6 +172,7 @@ void scan() {
 }
 
 void ausrichten() {
+	ecrobot_status_monitor("Function: ausrichten");
 	nxt_motor_set_count(NXT_PORT_A, 0);
 	while (nxt_motor_get_count(NXT_PORT_A) <= 160) {
 		move(70);
@@ -184,6 +192,7 @@ void ausrichten() {
 }
 
 void drehung(short turn) {
+	ecrobot_status_monitor("Function: drehung");
 
 	short richtung;
 
@@ -233,6 +242,7 @@ void drehung(short turn) {
 }
 
 void sensor() {
+	ecrobot_status_monitor("Function: sensor");
 	short foundIntersection = 0;
 
 	while (foundIntersection == 0) {
@@ -264,6 +274,7 @@ void sensor() {
  * wird true zurückgegeben.
  */
 short pointExists(short coordToCheck[2]) {
+	ecrobot_status_monitor("Function: pointExists");
 	short i;
 	for (i = 0; i < currentArrayPoint; i++) {
 		if (coordToCheck[0] == allPoints[i].coord[0]) {
@@ -276,6 +287,7 @@ short pointExists(short coordToCheck[2]) {
 }
 
 void createPoint(short coord[2]) {
+	ecrobot_status_monitor("Function: createPoint");
 	if (pointExists(coord) == 0) {
 		allPoints[currentArrayPoint].coord[0] = coord[0];
 		allPoints[currentArrayPoint].coord[1] = coord[1];
@@ -288,6 +300,7 @@ void createPoint(short coord[2]) {
  * der Wert des current Arrays, also des derzeit vereachteten Punkts zurückgegeben.
  */
 short getArrayAddressFromCoord(short coordToCheck[2]) {
+	ecrobot_status_monitor("Function: getArrayAddressFromCoord");
 	short i;
 	for (i = 0; i < currentArrayPoint; i++) {
 		if (coordToCheck[0] == allPoints[i].coord[0]) {
@@ -300,6 +313,7 @@ short getArrayAddressFromCoord(short coordToCheck[2]) {
 }
 
 void updatePoints() {
+	ecrobot_status_monitor("Function: updatePoints");
 	short coordNorth[2] = { currentCoord[0], currentCoord[1] + 1 };
 	short coordEast[2] = { currentCoord[0] + 1, currentCoord[1] };
 	short coordSouth[2] = { currentCoord[0], currentCoord[1] - 1 };
@@ -318,6 +332,7 @@ void updatePoints() {
  * er als Besucht markiert und die 4 Umliegenden Punkte erstellt, fals es sie noch nicht gibt!
  */
 void setNeighbourPoints(short forThisPoint) {
+	ecrobot_status_monitor("Function: setNeighbourPoints");
 	short coords[2] = { allPoints[forThisPoint].coord[0],
 			allPoints[forThisPoint].coord[1] };
 	short northPoint[2] = { coords[0], coords[1] + 1 };
@@ -331,6 +346,7 @@ void setNeighbourPoints(short forThisPoint) {
 }
 
 void visitPoint() {
+	ecrobot_status_monitor("Function: visitPoint");
 //Holt die Adresse in dem Array zu den Aktuellen Coordinaten
 	currentPoint = getArrayAddressFromCoord(currentCoord);
 	if (allPoints[currentPoint].visited == 0) {
@@ -357,6 +373,7 @@ void visitPoint() {
  * Coordinate um 1 wenn möglich
  */
 void moveNorth() {
+	ecrobot_status_monitor("Function: moveNorth");
 	currentCoord[1] = currentCoord[1] + 1;
 // bewege auch den roboter dahin
 	drehung(0);
@@ -366,6 +383,7 @@ void moveNorth() {
  * Coordinate um 1 wenn möglich
  */
 void moveEast() {
+	ecrobot_status_monitor("Function: moveEast");
 	currentCoord[0] = currentCoord[0] + 1;
 	drehung(1);
 }
@@ -374,6 +392,7 @@ void moveEast() {
  * Coordinate um 1 wenn möglich
  */
 void moveSouth() {
+	ecrobot_status_monitor("Function: moveSouth");
 	currentCoord[1] = currentCoord[1] - 1;
 	drehung(2);
 }
@@ -382,6 +401,7 @@ void moveSouth() {
  * Coordinate um 1 wenn möglich
  */
 void moveWest() {
+	ecrobot_status_monitor("Function: moveWest");
 	currentCoord[0] = currentCoord[0] - 1;
 	drehung(3);
 }
@@ -389,6 +409,7 @@ void moveWest() {
 // ---------------- Bear Heaven -----------------
 
 void useNewPath(short pointToVisit) {
+	ecrobot_status_monitor("Function: useNewPath");
 	short coords[2];
 
 	switch (allPoints[pointToVisit].edgeToPointBefore) {
@@ -423,6 +444,7 @@ void useNewPath(short pointToVisit) {
 }
 
 short getNextPoint() {
+	ecrobot_status_monitor("Function: getNextPoint");
 	short i; //Läuft in der for-schleife von 0-3 für alle Richtungen
 	short nextPointToVisit = 0; //Der nächste Punkt der noch nicht besucht ist
 	short buffer1[10] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 }; // Hier sind die Punkte gespeicher die geprüft werden
@@ -489,6 +511,7 @@ short getNextPoint() {
 }
 
 short goHome() {
+	ecrobot_status_monitor("Function: goHome");
 	short i; //Läuft in der for-schleife von 0-3 für alle Richtungen
 	short nextPointToVisit = 0; //Der nächste Punkt der noch nicht besucht ist
 	short buffer1[10] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 }; // Hier sind die Punkte gespeicher die geprüft werden
