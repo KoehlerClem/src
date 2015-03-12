@@ -41,7 +41,7 @@ void hello_world() {
 
 }
 short tokenfound = 0;
-int a;
+int a, v, l, r;
 short now = 0;
 short kanten[4] = { 0, 0, 0, 0 };
 void move(int v) {
@@ -52,16 +52,16 @@ void move(int v) {
 void left() {
 	ecrobot_status_monitor("Function: left");
 	while (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {
-		nxt_motor_set_speed(NXT_PORT_A, -65, 0);
-		nxt_motor_set_speed(NXT_PORT_B, 65, 0);
+		nxt_motor_set_speed(NXT_PORT_A, -75, 0);
+		nxt_motor_set_speed(NXT_PORT_B, 75, 0);
 	}
 }
 
 void right() {
 	ecrobot_status_monitor("Function: right");
 	while (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {
-		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
-		nxt_motor_set_speed(NXT_PORT_B, -65, 0);
+		nxt_motor_set_speed(NXT_PORT_A, 75, 0);
+		nxt_motor_set_speed(NXT_PORT_B, -75, 0);
 	}
 }
 
@@ -70,9 +70,8 @@ void left2(int g) {
 	nxt_motor_set_count(NXT_PORT_B, 0);
 	while ((ecrobot_get_light_sensor(NXT_PORT_S2) <= a)
 			&& (nxt_motor_get_count(NXT_PORT_B) <= g)) {
-		nxt_motor_set_speed(NXT_PORT_A, -65, 0);
-		nxt_motor_set_speed(NXT_PORT_B, 65, 0);
-		ecrobot_status_monitor("wert");
+		nxt_motor_set_speed(NXT_PORT_A, -75, 0);
+		nxt_motor_set_speed(NXT_PORT_B, 75, 0);
 	}
 
 }
@@ -82,8 +81,8 @@ void right2(int g) {
 	nxt_motor_set_count(NXT_PORT_A, 0);
 	while ((ecrobot_get_light_sensor(NXT_PORT_S2) <= a)
 			&& (nxt_motor_get_count(NXT_PORT_A) <= g)) {
-		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
-		nxt_motor_set_speed(NXT_PORT_B, -65, 0);
+		nxt_motor_set_speed(NXT_PORT_A, 75, 0);
+		nxt_motor_set_speed(NXT_PORT_B, -75, 0);
 	}
 }
 
@@ -91,8 +90,8 @@ void left3(int g) {
 	ecrobot_status_monitor("Function: left3");
 	nxt_motor_set_count(NXT_PORT_B, 0);
 	while (nxt_motor_get_count(NXT_PORT_B) <= g) {
-		nxt_motor_set_speed(NXT_PORT_A, -65, 0);
-		nxt_motor_set_speed(NXT_PORT_B, 65, 0);
+		nxt_motor_set_speed(NXT_PORT_A, -75, 0);
+		nxt_motor_set_speed(NXT_PORT_B, 75, 0);
 	}
 }
 
@@ -100,8 +99,8 @@ void right3(int g) {
 	ecrobot_status_monitor("Function: right3");
 	nxt_motor_set_count(NXT_PORT_A, 0);
 	while (nxt_motor_get_count(NXT_PORT_A) <= g) {
-		nxt_motor_set_speed(NXT_PORT_A, 65, 0);
-		nxt_motor_set_speed(NXT_PORT_B, -65, 0);
+		nxt_motor_set_speed(NXT_PORT_A, 75, 0);
+		nxt_motor_set_speed(NXT_PORT_B, -75, 0);
 	}
 }
 
@@ -114,10 +113,10 @@ void stopp() {
 void token() {
 	ecrobot_status_monitor("Function: token");
 	tokenfound++;
-	ecrobot_sound_tone(500, 500, 50);
+	ecrobot_sound_tone(220, 1000, 50);
 	nxt_motor_set_count(NXT_PORT_A, 0);
 	while (nxt_motor_get_count(NXT_PORT_A) >= -100) {
-		move(-65);
+		move(-75);
 	}
 	stopp();
 	systick_wait_ms(10000);
@@ -125,105 +124,98 @@ void token() {
 
 void scan() {
 	ecrobot_status_monitor("Function: scan");
-
 	kanten[(now + 2) % 4] = 1; // grade auf der Linie
 	nxt_motor_set_count(NXT_PORT_A, 0);
 
-	while (nxt_motor_get_count(NXT_PORT_A) <= 160) {    //bewegt sich nach vorn
-		move(70);
+	while (nxt_motor_get_count(NXT_PORT_A) <= 180) {    //bewegt sich nach vorn
+		move(75);
 	}
-	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {    //keine Linie
-		left2(100);
-		right2(200);
+	// Ab hier schaut er ob es eine Linie nach vorne
+	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {    //Korekturfunktion fals er noch nicht auf der Linie steht nach dem befahren der Kreuzung
+		left2(70);
+		right2(140);
 	}
 	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {    //Linie nicht gefunden
 		kanten[now] = 0;
 		ecrobot_sound_tone(1000, 500, 30);
-
-	} else {
+		v = 0;
+		left3(100);
+	} else {			//Linie gefunden
 		kanten[now] = 1;
-		ecrobot_sound_tone(100, 500, 30);             //Linie gefunden
+		ecrobot_sound_tone(100, 500, 30);
+		v = 1;
 	}
-	//links
-	left3(100);
-	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {             //keine Linie
-		left2(250);
-	}
+	//gibt es links eine Linie
+	left3(50);
+           //keine Linie
+	left2(300);
 	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {     //Linie nicht gefunden
 		kanten[(now + 3) % 4] = 0;
 		ecrobot_sound_tone(1000, 500, 30);
+		l = 0;
 	} else {
 		kanten[(now + 3) % 4] = 1;
-		ecrobot_sound_tone(100, 500, 30);        //sonst null
+		ecrobot_sound_tone(100, 500, 30);
+		l = 1;//sonst null
 	}
 	//rechts
-	left3(100);
+	left3(50);
 	left2(250);
-	left3(100);
-	left2(250);
+	left3(50);
+	left2(350);
 	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {
 		kanten[(now + 1) % 4] = 0;
 		ecrobot_sound_tone(1000, 500, 30);
-
+		r = 0;
 	} else {
 		kanten[(now + 1) % 4] = 1;
 		ecrobot_sound_tone(100, 500, 30);
+		r = 1;
 	}
+	if(v == 1 && l == 1 && r == 1){ ecrobot_status_monitor("GE LI RE");}
+	if(v == 1 && l == 1 && r == 0){ ecrobot_status_monitor("GE LI");}
+	if(v == 1 && l == 0 && r == 1){ ecrobot_status_monitor("GE RE");}
+	if(v == 0 && l == 1 && r == 1){ ecrobot_status_monitor("LI RE");}
+	if(v == 1 && l == 0 && r == 0){ ecrobot_status_monitor("GERADE");}
+	if(v == 0 && l == 1 && r == 0){ ecrobot_status_monitor("LINKS");}
+	if(v == 0 && l == 0 && r == 1){ ecrobot_status_monitor("RECHTS");}
 }
 
 void ausrichten() {
 	ecrobot_status_monitor("Function: ausrichten");
 	nxt_motor_set_count(NXT_PORT_A, 0);
 	while (nxt_motor_get_count(NXT_PORT_A) <= 160) {
-		move(70);
-	}    //bewegt sich nach vorn
-
-	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {    //keine Linie
-		left2(100);
-		right2(200);
+		move(75);
+	}    //bewegt sich nach vor
+	if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {    //Wenn eine Linie in Fahrtrichtung ist findet er sie und stell sich auf sie
+		left2(70);
+		right2(140);
 	}
-	if (kanten[(now + 1) % 4] == 1) {
+	if (allPoints[currentPoint].arrayEdges[(now + 5) % 4] == 1) { // wenn sich recht vom Roboter eine Kante befindet soll er sie auf sie drehen
 		right3(50);
 		right2(250);
-	} else {
+	} else {		// Wenn nicht dreht er sich um 150 nach rechts
 		right3(150);
 	}
-
 }
 
 void drehung(short turn) {
 	ecrobot_status_monitor("Function: drehung");
 
-	short richtung;
-
-	richtung = (turn - now) % 4;
-
-	//switch
-
+	short richtung; // Die Richtung für den Roboter berechnet aus der Ausgangsrichtung und dem Bewegungsbefehl in Himmelsrichtung
+	richtung = (turn - now + 4) % 4;
 	switch (richtung) {
-	case 1: //rechts
-		now = (now + 1) % 4;
-		break;
-
-	case 3: //links
-		if (kanten[now] == 0) {
-			left3(50);
-			ecrobot_sound_tone(1000, 500, 30);
-			left2(500);
-		} else {
-			left3(50);
-			left2(300);
-			ecrobot_sound_tone(100, 500, 30);
-			left3(50);
-			left2(350);
-		}
-		now = (now + 3) % 4;
-		break;
 
 	case 0:    //geradeaus
+		ecrobot_sound_tone(1000, 500, 30);
+		ecrobot_sound_tone(1000, 500, 30);
 		left3(50);
 		left();
 		//now gleich
+		break;
+
+	case 1: //rechts
+		now = (now + 1) % 4;
 		break;
 
 	case 2:    //zurück
@@ -232,11 +224,18 @@ void drehung(short turn) {
 		now = (now + 2) % 4;
 		break;
 
+	case 3: //links
+		right3(50);
+		right2(400);
+		right3(100);
+		right2(300);
+		now = (now + 3) % 4;
+		break;
+
 	default:
 		ecrobot_sound_tone(1000, 400, 50);
 		ecrobot_sound_tone(100, 400, 50);
 		ecrobot_sound_tone(1000, 400, 50);
-
 	}
 	sensor();
 }
@@ -251,18 +250,19 @@ void sensor() {
 				|| ecrobot_get_touch_sensor(NXT_PORT_S4) == 1) {
 			token();
 		}
-		move(70);
+		move(75);
 
 		if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {
 
-			left2(100);
-			right2(200);
+			left2(70);
+			right2(140);
 		}
 		if (ecrobot_get_light_sensor(NXT_PORT_S2) <= a) {
 			foundIntersection = 1;
-			left2(100);
+			left2(70);
 			visitPoint();    //scan();
 		}
+		ecrobot_status_monitor("Function: sensor");
 	}
 
 }
@@ -300,6 +300,7 @@ void createPoint(short coord[2]) {
  * der Wert des current Arrays, also des derzeit vereachteten Punkts zurückgegeben.
  */
 short getArrayAddressFromCoord(short coordToCheck[2]) {
+	ecrobot_status_monitor("Function: getArrayAddressFromCoord");
 	short i;
 	for (i = 0; i < currentArrayPoint; i++) {
 		if (coordToCheck[0] == allPoints[i].coord[0]) {
@@ -438,7 +439,6 @@ void useNewPath(short pointToVisit) {
 		break;
 	case -1:
 		break;
-
 	}
 }
 
@@ -472,18 +472,17 @@ short getNextPoint() {
 			indexBuffer1++;
 		}
 	}
-
 	while (nextPointToVisit == 0) { // => Solange kein Punkt gefunden ist der noch nicht besucht worden ist
+		ecrobot_status_monitor("Function: getNextPoint");
 		indexBuffer1 = 0; // Setzt den Indexbuffer auf den ersten Punkt im Buffer1-Array
 		indexBuffer2 = 0; // Der nächste neue zu überprüfende Punkt wird im Buffer2 an die Position 0 geschrieben
 
 		while (buffer1[indexBuffer1] != -1) { // Überprüft ob es noch einen Punkt im Buffer1-Array gibt
+			ecrobot_status_monitor("Function: getNextPoint");
 			checkThisPoint = buffer1[indexBuffer1]; // Ließt aus dem Array die Adresse des zu überprüfenden Punkted aus
-
 			if (allPoints[checkThisPoint].visited == 0) { // Checkt ob der momentan betrachtete Punkt schon besucht worden ist
 				return nextPointToVisit = checkThisPoint; // Fals ja, setzt den nächst zu besuchenden Point gleich dem momentan betrachteten Punkt
 			}
-
 			setNeighbourPoints(checkThisPoint); // Füllt das Array neightbourPoint mit den Nachbarpunkten des momentan betrachteten Punktes auf
 			for (i = 0; i < 4; i++) {
 				if (allPoints[checkThisPoint].arrayEdges[i] == 1
@@ -496,12 +495,10 @@ short getNextPoint() {
 					}
 					buffer2[indexBuffer2] = neighbourPoint[i]; // Speichert den gerade betrachteten Nachbarpunkt an der Kante i in das Buff
 					indexBuffer2++;
-
 				}
 			}
 			indexBuffer1++;
 		}
-
 		for (indexBuffer2 = 0; indexBuffer2 < 10; indexBuffer2++) { // Schreibt den Buffer2 in Buffer1 und leert Buffer2 wenn Buffer1 abgearbeitet ist
 			buffer1[indexBuffer2] = buffer2[indexBuffer2];
 			buffer2[indexBuffer2] = -1;
@@ -518,7 +515,6 @@ short goHome() {
 	short indexBuffer1 = 0; // Laufvariable die den ersten Buffer durchläuft
 	short indexBuffer2; // Laufvariable für den 2. Buffer
 	short checkThisPoint; //Der Punkt dessen Nachbarn als nächstes überprüft werden sollen
-
 	for (i = 0; i < 77; i++) { // Setzt für alle Punkte zurück, dass es einen Pfad zu ihnen gibt
 		allPoints[i].pathToPointExists = 0;
 	}
@@ -539,18 +535,14 @@ short goHome() {
 			indexBuffer1++;
 		}
 	}
-
 	while (nextPointToVisit == 0) { // => Solange kein Punkt gefunden ist der noch nicht besucht worden ist
 		indexBuffer1 = 0; // Setzt den Indexbuffer auf den ersten Punkt im Buffer1-Array
 		indexBuffer2 = 0; // Der nächste neue zu überprüfende Punkt wird im Buffer2 an die Position 0 geschrieben
-
 		while (buffer1[indexBuffer1] != -1) { // Überprüft ob es noch einen Punkt im Buffer1-Array gibt
 			checkThisPoint = buffer1[indexBuffer1]; // Ließt aus dem Array die Adresse des zu überprüfenden Punkted aus
-
 			if (checkThisPoint == 0) { // Checkt ob der momentan betrachtete Punkt schon besucht worden ist
 				return nextPointToVisit = checkThisPoint; // Fals ja, setzt den nächst zu besuchenden Point gleich dem momentan betrachteten Punkt
 			}
-
 			setNeighbourPoints(checkThisPoint); // Füllt das Array neightbourPoint mit den Nachbarpunkten des momentan betrachteten Punktes auf
 			for (i = 0; i < 4; i++) {
 				if (allPoints[checkThisPoint].arrayEdges[i] == 1
@@ -569,21 +561,22 @@ short goHome() {
 			}
 			indexBuffer1++;
 		}
-
 		for (indexBuffer2 = 0; indexBuffer2 < 10; indexBuffer2++) { // Schreibt den Buffer2 in Buffer1 und leert Buffer2 wenn Buffer1 abgearbeitet ist
 			buffer1[indexBuffer2] = buffer2[indexBuffer2];
 			buffer2[indexBuffer2] = -1;
 		}
 	}
 }
+void light(){
+	ecrobot_set_light_sensor_active(NXT_PORT_S2);
+	ecrobot_get_light_sensor(NXT_PORT_S2);
+}
 TASK(OSEK_Main_Task) {
 	ecrobot_set_light_sensor_active(NXT_PORT_S2);
-	a = ((ecrobot_get_light_sensor(NXT_PORT_S2)) - 100);
-	//a=ecrobot_get_light_sensor(NXT_PORT_S2)-80;
-	sensor();
-	//Füllt alle Points mit werten auf
+	systick_wait_ms(500);
+	a = ((ecrobot_get_light_sensor(NXT_PORT_S2)) - 85);
 	short pointsfiller;
-	for (pointsfiller = 0; pointsfiller < 77; pointsfiller++) {
+	for ( pointsfiller = 0; pointsfiller < 77; pointsfiller++ ){
 		allPoints[pointsfiller].pathToPointExists = 0;
 		allPoints[pointsfiller].coord[0] = 0;
 		allPoints[pointsfiller].coord[1] = 0;
@@ -593,6 +586,9 @@ TASK(OSEK_Main_Task) {
 		allPoints[pointsfiller].arrayEdges[2] = 0;
 		allPoints[pointsfiller].arrayEdges[3] = 0;
 	}
+	//a=ecrobot_get_light_sensor(NXT_PORT_S2)-80;
+	sensor();
+	//Füllt alle Points mit werten auf
 	while (1) {
 		hello_world();
 		if (tokenfound < 3) {
